@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TEST : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPos;
     [SerializeField] private Heroes _enemy;
-    [SerializeField] public float _cast = 1;
+    [SerializeField] public float _cast;
 
     private ISkillDamage a;
 

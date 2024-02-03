@@ -1,6 +1,8 @@
 ﻿using System;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class HeroesUI : MonoBehaviour
@@ -9,7 +11,7 @@ public class HeroesUI : MonoBehaviour
     [SerializeField] private Slider _manaBar;
     [SerializeField] private Image _simpleDamageImage;
     [SerializeField] private Image _skillDamageImage;
-    [SerializeField] private Image _skillCastImage;
+    [SerializeField] private Image _castBar;
 
     
 
@@ -29,30 +31,26 @@ public class HeroesUI : MonoBehaviour
 
     private void OnEnable()
     {
-        //_hero.OnTakeDamaged += ChangeHp;
-        ISkillDamage.OnStartCast += StartFillSkillCastSlider;
+        ISkillDamage.OnStartedCast += StartFillCastBar;
     }
 
     private void OnDisable()
     {
-        ISkillDamage.OnStartCast -= StartFillSkillCastSlider;
+        //ISkillDamage.OnStartCast -= StartFillSkillCastSlider;
 
         //_hero.OnTakeDamaged -= ChangeHp;
     }
 
-    private void StartFillSkillCastSlider(object sender, EventArgs e)
+    private void StartFillCastBar(float castTime)
     {
-        
+        _castBar.DOFillAmount(0, castTime).onComplete();
     }
-    //
-    // private void Start()
-    // {
-    //     _hpBar.maxValue = _hero.HP;
-    //     _hpBar.minValue = 0f;
-    //
-    //     _manaBar.maxValue = _hero.Mana;
-    //     _hpBar.minValue = 0f;
-    // }
+
+    private void StopFillCastBar()
+    {
+        _castBar.fillAmount = 1;
+    }
+
     
     private void ChangeHp() => 
         _hpBar.value = _hero.HP;

@@ -3,6 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FireSkill : ISkillDamage
 {
@@ -10,12 +11,10 @@ public class FireSkill : ISkillDamage
     public AttackObjectsFactory AttackObjectsFactory { get; set; }
     public float delay { get; set; }
     public bool isDelayed { get; set; }
-
-    public static event EventHandler OnStartCast;
-    public static event EventHandler OnStopCast;
     
     private AttackObjectsFactory factory;
     private Transform _aim;
+    
     private float _flyTime;
     private float _castTime;
 
@@ -45,10 +44,11 @@ public class FireSkill : ISkillDamage
         yield return new WaitForSeconds(this.delay);
         isDelayed = false;
     }
-    
+
     private IEnumerator StartCastRoutine()
     {
-        OnStartCast?.Invoke(null,EventArgs.Empty);
+        
+        ISkillDamage.OnStartedCast?.Invoke(_castTime);
         yield return new WaitForSeconds(_castTime);
         
         var attackObj = factory.GetObject();
@@ -61,7 +61,6 @@ public class FireSkill : ISkillDamage
 
     private void StopCastRoutine()
     {
-        OnStopCast?.Invoke(null, EventArgs.Empty);
         CoroutineHandler.Instance.StopCoroutine(StartCastRoutine());
     }
 }

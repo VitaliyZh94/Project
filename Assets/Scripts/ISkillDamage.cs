@@ -7,8 +7,6 @@ public interface ISkillDamage : ISkill
 {
     public AttackObjectsFactory AttackObjectsFactory { get; set; }
     public void Attack(Heroes aim);
-    
-    public static event EventHandler OnStartCast;
-    
-    public static event EventHandler OnStopCast;
+    public static Action<float> OnStartedCast;  //use this in realized classes
+
 }
