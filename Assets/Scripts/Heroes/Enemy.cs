@@ -1,28 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.Serialization;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : Heroes
 {
-
-
     public override Transform Position { get; set; }
-    public override float SimpleDamageDelay { get; set; }
-    public override float SkillDamageDelay { get; set; }
     public override float ManaRecoverySpeed { get; set; }
-    public override float SkillDamage(float damage)
-    {
-        return 3f;
-    }
 
-    public override float SimpleDamage(float damage)
+    [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private Transform _heroe;
+
+    private void Update()
     {
-        return 3f;
+        Move();
     }
 
     public override void Move()
     {
-        
+        agent.SetDestination(_heroe.position);
     }
 
     public override void StopAttack()

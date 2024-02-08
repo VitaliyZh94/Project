@@ -13,8 +13,3 @@ public class WarriorSettings : ScriptableObject
     public float SkillDamageDelay;
     
 }
-
-public class EntryPoint : MonoBehaviour
-{
-    
-}

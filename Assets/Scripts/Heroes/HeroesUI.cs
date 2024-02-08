@@ -43,7 +43,7 @@ public class HeroesUI : MonoBehaviour
 
     private void StartFillCastBar(float castTime)
     {
-        _castBar.DOFillAmount(0, castTime).onComplete();
+        _castBar.DOFillAmount(0, castTime);
     }
 
     private void StopFillCastBar()

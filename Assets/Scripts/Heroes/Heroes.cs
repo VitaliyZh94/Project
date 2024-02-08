@@ -3,12 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public abstract class Heroes : MonoBehaviour, IDamagetable
 {
+    public Action OnTakeDamaged;
+    public Action OnEnemyDied;
+    public Action OnPlayerDied;
+    
     protected float health;
     protected float mana;
-    
+
     public abstract Transform Position { get; set; }
+
     public float HP
     {
         get => health;
@@ -20,6 +26,7 @@ public abstract class Heroes : MonoBehaviour, IDamagetable
                 health = value;
         }
     }
+
     public float Mana
     {
         get => mana;
@@ -31,23 +38,16 @@ public abstract class Heroes : MonoBehaviour, IDamagetable
                 mana = value;
         }
     }
-    public abstract float SimpleDamageDelay { get; set; }
-    public abstract float SkillDamageDelay { get; set; }
+
     public abstract float ManaRecoverySpeed { get; set; }
-    
-    public abstract float SkillDamage(float damage);
-    
-    public abstract float SimpleDamage(float damage);
 
     public abstract void Move();
     public abstract void StopAttack();
+
 
     public virtual float TakeDamage(float damage)
     {
         OnTakeDamaged?.Invoke();
         return damage;
     }
-
-    public Action OnTakeDamaged;
-
 }

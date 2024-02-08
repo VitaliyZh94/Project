@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class FireSkill : ISkillDamage
 {
-    
     public AttackObjectsFactory AttackObjectsFactory { get; set; }
     public float delay { get; set; }
     public bool isDelayed { get; set; }
-    
+
     private AttackObjectsFactory factory;
     private Transform _aim;
     
@@ -38,6 +35,8 @@ public class FireSkill : ISkillDamage
         }
     }
 
+    public event Action<float> OnStartedCast;
+
 
     private IEnumerator DelayBetweenAttackRoutine()
     {
@@ -48,7 +47,7 @@ public class FireSkill : ISkillDamage
     private IEnumerator StartCastRoutine()
     {
         
-        ISkillDamage.OnStartedCast?.Invoke(_castTime);
+        OnStartedCast?.Invoke(_castTime);
         yield return new WaitForSeconds(_castTime);
         
         var attackObj = factory.GetObject();
