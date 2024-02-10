@@ -5,23 +5,28 @@ using UnityEngine.Serialization;
 
 public class PlayerActions : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemy;
+    [SerializeField] private Heroes _enemy;
     [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] public float _cast;
+    [SerializeField] private Transform _spawnPos;
    
     [SerializeField] private float _speed;
-    [SerializeField] private float _rotateSpeed;
-    
 
+    [SerializeField] private float _rotateSpeed;
+
+    private ISkillDamage skill;
+    
     public bool IsCanMove = true;
 
     private void OnEnable()
     {
-        ISkillDamage.OnStartedCast += StopCasting;
+        skill = new FarSkill(3, _cast, 1, "FireBall", _spawnPos, _enemy.transform);
+        skill.OnStartedCast += StopMoving;
     }
 
     private void OnDisable()
     {
-        ISkillDamage.OnStartedCast -= StopCasting;
+        skill.OnStartedCast -= StopMoving;
     }
 
     private void Update()
@@ -30,7 +35,15 @@ public class PlayerActions : MonoBehaviour
         {
             Move();
         }
+        
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            skill.Attack(_enemy);
+        }
     }
+
+    public void StopMoving(float castTime) => 
+        StartCoroutine(StopMoveRoutine(castTime));
 
     private void Move()
     {
@@ -44,9 +57,6 @@ public class PlayerActions : MonoBehaviour
         transform.forward = (_enemy.transform.position - transform.position).normalized;
     }
 
-
-    private void StopCasting(float castTime) => 
-        StartCoroutine(StopMoveRoutine(castTime));
 
     private IEnumerator StopMoveRoutine(float castTime)
     {
