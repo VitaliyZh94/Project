@@ -1,8 +1,6 @@
-﻿using System;
+﻿using System.Collections;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class HeroesUI : MonoBehaviour
@@ -12,38 +10,39 @@ public class HeroesUI : MonoBehaviour
     [SerializeField] private Image _simpleDamageImage;
     [SerializeField] private Image _skillDamageImage;
     [SerializeField] private Image _castBar;
+    [SerializeField] private Text _skillDamageTimer;
 
-    
-
-    [SerializeField] private TEST _test;
+ 
     
     private Heroes _hero;
 
-    private void Start()
-    {
-        
-    }
+ 
 
-    private void Update()
-    {
-        
-    }
 
     private void OnEnable()
     {
-        ISkillDamage.OnStartedCast += StartFillCastBar;
+        Skills.OnCastStarted += StartCastBar;
+        Skills.OnDelayStarted += StartDelayIcon;
     }
 
     private void OnDisable()
     {
-        //ISkillDamage.OnStartCast -= StartFillSkillCastSlider;
-
-        //_hero.OnTakeDamaged -= ChangeHp;
+        Skills.OnCastStarted -= StartCastBar;
+        Skills.OnDelayStarted -= StartDelayIcon;
     }
 
-    private void StartFillCastBar(float castTime)
+    private void StartDelayIcon(float delay)
     {
-        _castBar.DOFillAmount(0, castTime);
+        _skillDamageImage.DOFillAmount(0, 0)
+            .OnComplete(()=>
+                _skillDamageImage.DOFillAmount(1,delay));
+    }
+    
+    private void StartCastBar(float castTime)
+    {
+        _castBar.DOFillAmount(0, castTime)
+            .OnComplete(() =>
+                _castBar.DOFillAmount(1, 0));
     }
 
     private void StopFillCastBar()
