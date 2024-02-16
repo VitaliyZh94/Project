@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 public class LoadGameState : IState
 {
@@ -19,14 +18,13 @@ public class LoadGameState : IState
         CoroutineHandler.Instance.StartRoutine(ChangeStateAfterFakeTimeRoutine());
     }
 
-    public void Exit()
-    {
+    public void Exit() => 
         Debug.Log("Exit LoadGameState");
-    }
 
     private IEnumerator ChangeStateAfterFakeTimeRoutine()
     {
         yield return new WaitForSeconds(3f);
+        
         _gameStateMachine.ChangeState(new MainMenuState());
     }
 }

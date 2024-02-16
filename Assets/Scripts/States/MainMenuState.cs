@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MainMenuState : IState
 {
-
     public void Enter() => 
-        SceneManager.LoadScene(Constants.Menu);
+        SceneManager.LoadScene(Constants.MenuScene);
 
-    public void Exit()
-    {
+    public void Exit() => 
         Debug.Log("Exit MenuState");
-    }
 }

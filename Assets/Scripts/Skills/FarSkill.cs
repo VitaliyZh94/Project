@@ -1,66 +1,70 @@
-﻿using System;
-using System.Collections;
-using DG.Tweening;
+﻿using System.Collections;
 using UnityEngine;
 
-public class FireSkill : ISkillDamage
+public class FarSkill : Skills
 {
-    public AttackObjectsFactory AttackObjectsFactory { get; set; }
-    public float CastTime { get; set; }
-    public float Delay { get; set; }
-    public bool isDelayed { get; set; }
-
-    private AttackObjectsFactory factory;
-    private Transform _aim;
-
-    private float _flyObjectTime;
-
-
-    public FireSkill(float delay, float cast, float flyObjectTime, string objectPath, Transform spawnPos, Transform aim)
+    private AttackObjectsFactory _factory;
+    private Heroes _aim;
+    private Heroes _player;
+    
+    private float _castTime;
+    private float _delay;
+    private float _manaCost;
+    private bool _isDelayed;
+    
+    
+    public FarSkill(float delay, float castTime, string objectPath, Transform spawnPos, Heroes player, float manaCost)
     {
-        _flyObjectTime = flyObjectTime;
-        _aim = aim;
-        Delay = delay;
-        CastTime = cast;
-        isDelayed = false;
+        _manaCost = manaCost;
+        _castTime = castTime;
+        _delay = delay;
+        _isDelayed = false;
+        _player = player;
 
-        factory = new AttackObjectsFactory(objectPath, spawnPos);
+        _factory = new AttackObjectsFactory(objectPath, spawnPos);
     }
 
 
     public void Attack(Heroes aim)
     {
-        if (isDelayed == false)
+        if (_isDelayed == false && IsEnoughtManaToAttack())
         {
-            CoroutineHandler.Instance.StartRoutine(StartCastRoutine());
+            
+            _player.GetComponent<PlayerMove>().StopMoving();
+            _player.ChangeMana(_manaCost);
+            
+            CoroutineHandler.Instance.StartRoutine(ShotRoutine());
         }
     }
 
-    public event Action<float> OnStartedCast;
-
-
-    private IEnumerator DelayBetweenAttackRoutine()
+    private IEnumerator ShotRoutine()
     {
-        yield return new WaitForSeconds(this.Delay);
-        isDelayed = false;
-    }
-
-    private IEnumerator StartCastRoutine()
-    {
+        _isDelayed = true;
+        OnCastStarted?.Invoke(_castTime);
         
-        OnStartedCast?.Invoke(_flyObjectTime);
-        yield return new WaitForSeconds(_flyObjectTime);
+        yield return new WaitForSeconds(_castTime);
         
-        var attackObj = factory.GetObject();
-        attackObj.gameObject.transform.DOMove(new Vector3(_aim.transform.position.x, _aim.transform.position.y, _aim.transform.position.z), _flyObjectTime);
+        var attackObj = _factory.GetObject();
+        attackObj.Attack();
         
-        isDelayed = true;
+        OnDelayStarted?.Invoke(_delay);
         
         CoroutineHandler.Instance.StartRoutine(DelayBetweenAttackRoutine());
     }
 
-    private void StopCastRoutine()
+    private IEnumerator DelayBetweenAttackRoutine()
     {
-        CoroutineHandler.Instance.StopCoroutine(StartCastRoutine());
+        yield return new WaitForSeconds(_delay);
+        _isDelayed = false;
+    }
+
+    private bool IsEnoughtManaToAttack()
+    {
+        var curMana = _player.Mana;
+
+        if (curMana >= _manaCost)
+            return true;
+        else
+            return false;
     }
 }

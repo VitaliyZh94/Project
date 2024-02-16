@@ -1,28 +1,24 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using UnityEngine;
 
 public class EntryPoint : MonoBehaviour
 {
-    public GameStateMachine GameStateMachine { get; set; }
-    public static EntryPoint Instance;
-
+    public GameStateMachine GameStateMachine { get; private set; }
     private FakeLoading _fakeLoading;
+    
+    public static EntryPoint Instance;
 
     private void Awake()
     {
         if (Instance == null) 
             Instance = this;
         
-        else if (Instance = this) 
+        else if (Instance == this) 
             Destroy(gameObject);
         
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
+    private void Start()
     {
         _fakeLoading = new FakeLoading();
         GameStateMachine = new GameStateMachine();

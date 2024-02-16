@@ -3,14 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class ChooseHeroState : IState
 {
-    public void Enter()
-    {
-        Debug.Log("Enter ChooseHeroState");
-        SceneManager.LoadScene(Constants.ChooseHero);
-    }
+    public void Enter() => 
+        SceneManager.LoadScene(Constants.ChooseHeroScene);
 
-    public void Exit()
-    {
+    public void Exit() => 
         Debug.Log("Exit ChooseHeroState");
-    }
 }

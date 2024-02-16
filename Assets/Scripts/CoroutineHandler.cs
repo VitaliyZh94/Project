@@ -18,8 +18,4 @@ public class CoroutineHandler : MonoBehaviour
     
     public void StartRoutine(IEnumerator enumerator) => 
         StartCoroutine(enumerator);
-
-    public void StopRoutine(IEnumerator enumerator) =>
-        StopCoroutine(enumerator);
-
 }
