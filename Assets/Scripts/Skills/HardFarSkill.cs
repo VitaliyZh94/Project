@@ -68,3 +68,5 @@ public class FarSkill : Skills
             return false;
     }
 }
+
+public class 
