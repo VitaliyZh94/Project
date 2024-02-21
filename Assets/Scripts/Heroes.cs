@@ -2,10 +2,8 @@ using System;
 using UnityEngine;
 
 
-public abstract class Heroes : MonoBehaviour, IDamagetable
+public abstract class Heroes : MonoBehaviour, IDamageable
 {
-    public static Action<float> OnTakeDamaged;
-
     protected float ManaRecoverySpeed;
     protected float MaxMana;
     
@@ -23,7 +21,7 @@ public abstract class Heroes : MonoBehaviour, IDamagetable
     public void TakeDamage(float damage)
     {
         HP -= damage; 
-        OnTakeDamaged?.Invoke(damage);
+        EventBus.TakeDamage(damage);
     }
 
     public void ChangeMana(float mana)

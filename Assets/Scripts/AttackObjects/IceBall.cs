@@ -3,11 +3,10 @@
 [RequireComponent(typeof(Rigidbody))]
 public class IceBall : AttackObject
 {
-    [SerializeField] private float _damage;
+    
     [SerializeField] private float _speed;
 
     private IMoveble _moveble;
-    private IDamagetable _damagetable;
     
     private Rigidbody _rb;
 
@@ -30,8 +29,8 @@ public class IceBall : AttackObject
         if (other.gameObject.TryGetComponent(out _moveble)) 
             _moveble.StopMoving();
 
-        if (other.gameObject.TryGetComponent(out _damagetable)) 
-            _damagetable.TakeDamage(_damage);
+        if (other.gameObject.TryGetComponent(out Damageable)) 
+            Damageable.TakeDamage(Damage);
 
         gameObject.SetActive(false);
     }

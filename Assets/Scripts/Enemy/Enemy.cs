@@ -13,8 +13,6 @@ public class Enemy : Heroes, IMoveble
     
     [SerializeField] private float _damage;
     [SerializeField] private float _speed;
-
-    public static Action OnEnemyDied;
     public float Speed { get; set; }
     
     private float _startSpeed;
@@ -62,7 +60,7 @@ public class Enemy : Heroes, IMoveble
     {
         agent.SetDestination(transform.position);
         _rb.isKinematic = true;
-        OnEnemyDied?.Invoke();
+        EventBus.EnemyDie();
     }
     
     private void Attack() => 

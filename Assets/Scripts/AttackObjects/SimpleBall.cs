@@ -20,4 +20,12 @@ public class SimpleBall : AttackObject
         _rb.AddForce(vector * _speed, ForceMode.VelocityChange);
         _rb.useGravity = false;
     }
+    
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.TryGetComponent(out Damageable)) 
+            Damageable.TakeDamage(Damage);
+
+        gameObject.SetActive(false);
+    }
 }

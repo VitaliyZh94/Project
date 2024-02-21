@@ -1,39 +1,53 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour, IMoveble
 {
     [SerializeField] private Heroes _enemy;
-    [SerializeField] private Heroes _player;
     [SerializeField] private Rigidbody _rigidbody;
-    [SerializeField] private Transform _spawnPos;
-
+    
     [SerializeField] private float _speed;
-    [SerializeField] private float _castTime;
-    [SerializeField] private float _manaCost;
+    [SerializeField] private float _deathYPos = 3f;
 
-    private FarSkill _skill;
-    
-    private bool _isCanMove = true;
+    private float _yStartPosition;
+    private bool _isCanMove;
+    private float _castSkillTime;
+
     public float Speed { get; set; }
-    
+
+    private void OnEnable()
+    {
+        EventBus.OnCastStarted += CastTime;
+        EventBus.OnPlayerDied += DisableInputs;
+        EventBus.OnEnemyDied += DisableInputs;
+    }
+
+    private void OnDisable()
+    {
+        EventBus.OnCastStarted -= CastTime;
+        EventBus.OnPlayerDied -= DisableInputs;
+        EventBus.OnEnemyDied -= DisableInputs;
+    }
+
     private void Start()
     {
-        _skill = new FarSkill(3, _castTime, Constants.IceBallPrefabPath, _spawnPos, _player, _manaCost);
+        _isCanMove = true;
         Speed = _speed;
+        _yStartPosition = gameObject.transform.position.y;
     }
-    
+
     private void Update()
     {
         if (_isCanMove == true) 
             Move();
 
-        if (Input.GetKeyDown(KeyCode.P)) 
-            _skill.Attack(_enemy);
+        if (_yStartPosition - transform.position.y > _deathYPos) 
+            EventBus.PlayerDie();
     }
 
     public void StopMoving() => 
-        StopMoving(_castTime);
+        StartCoroutine(StopMoveRoutine());
 
     public void Move()
     {
@@ -43,18 +57,21 @@ public class PlayerMove : MonoBehaviour, IMoveble
         transform.Translate(new Vector3(horizontal, 0, vertical) * Speed * Time.deltaTime);
         transform.forward = (_enemy.transform.position - transform.position).normalized;
     }
-    
-    private void StopMoving(float castTime) => 
-        StartCoroutine(StopMoveRoutine(castTime));
 
-    private IEnumerator StopMoveRoutine(float castTime)
+    private IEnumerator StopMoveRoutine()
     {
         _isCanMove = false;
         _rigidbody.isKinematic = true;
         
-        yield return new WaitForSeconds(castTime);
+        yield return new WaitForSeconds(_castSkillTime);
         
         _isCanMove = true;
         _rigidbody.isKinematic = false;
     }
+
+    private void CastTime(float castTime) => 
+        _castSkillTime = castTime;
+
+    private void DisableInputs() => 
+        _isCanMove = false;
 }   

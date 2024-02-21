@@ -21,16 +21,16 @@ public class PlayerUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Skills.OnCastStarted += StartCastBar;
-        Skills.OnDelayStarted += StartDelayIcon;
-        Heroes.OnTakeDamaged += ChangeHp;
+        EventBus.OnCastStarted += StartCastBar;
+        EventBus.OnDelayStarted += StartDelayIcon;
+        EventBus.OnTakeDamage += ChangeHp;
     }
 
     private void OnDisable()
     {
-        Skills.OnCastStarted -= StartCastBar;
-        Skills.OnDelayStarted -= StartDelayIcon;
-        Heroes.OnTakeDamaged -= ChangeHp;
+        EventBus.OnCastStarted -= StartCastBar;
+        EventBus.OnDelayStarted -= StartDelayIcon;
+        EventBus.OnTakeDamage -= ChangeHp;
     }
 
     private void Awake() => 

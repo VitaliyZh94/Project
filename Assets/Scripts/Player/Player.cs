@@ -6,8 +6,6 @@ public class Player : Heroes
     [SerializeField] private float _manaRecoverySpeed;
     [SerializeField] private float _mana;
     [SerializeField] private float _hp;
-    
-    public static Action OnPlayerDied;
 
     private void Awake()
     {
@@ -19,7 +17,6 @@ public class Player : Heroes
     
     protected override void Die()
     {
-        Debug.Log("DIE");
-        OnPlayerDied?.Invoke();
+        EventBus.PlayerDie();
     }
 }

@@ -1,22 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
-public class FarSkill : Skills
+public class HardFarSkill : Skills
 {
-    private AttackObjectsFactory _factory;
-    private Heroes _aim;
     private Heroes _player;
-    
-    private float _castTime;
-    private float _delay;
     private float _manaCost;
-    private bool _isDelayed;
     
-    
-    public FarSkill(float delay, float castTime, string objectPath, Transform spawnPos, Heroes player, float manaCost)
+    public HardFarSkill(float delay, float castTime, string objectPath, Transform spawnPos, Heroes player, float manaCost)
     {
         _manaCost = manaCost;
-        _castTime = castTime;
+        CastTime = castTime;
         _delay = delay;
         _isDelayed = false;
         _player = player;
@@ -25,11 +19,10 @@ public class FarSkill : Skills
     }
 
 
-    public void Attack(Heroes aim)
+    public override void Attack()
     {
         if (_isDelayed == false && IsEnoughtManaToAttack())
         {
-            
             _player.GetComponent<PlayerMove>().StopMoving();
             _player.ChangeMana(_manaCost);
             
@@ -40,14 +33,14 @@ public class FarSkill : Skills
     private IEnumerator ShotRoutine()
     {
         _isDelayed = true;
-        OnCastStarted?.Invoke(_castTime);
+        EventBus.StartCasting(CastTime);
         
-        yield return new WaitForSeconds(_castTime);
+        yield return new WaitForSeconds(CastTime);
         
         var attackObj = _factory.GetObject();
         attackObj.Attack();
         
-        OnDelayStarted?.Invoke(_delay);
+        EventBus.DelayStart(_delay);
         
         CoroutineHandler.Instance.StartRoutine(DelayBetweenAttackRoutine());
     }
@@ -68,5 +61,3 @@ public class FarSkill : Skills
             return false;
     }
 }
-
-public class 

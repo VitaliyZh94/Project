@@ -19,12 +19,12 @@ public class EnemyUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Heroes.OnTakeDamaged += ChangeHp;
+        EventBus.OnTakeDamage += ChangeHp;
     }
 
     private void OnDisable()
     {
-        Heroes.OnTakeDamaged -= ChangeHp;
+        EventBus.OnTakeDamage -= ChangeHp;
     }
 
     private void Start()

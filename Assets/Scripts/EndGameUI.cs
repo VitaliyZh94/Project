@@ -9,14 +9,14 @@ public class EndGameUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Player.OnPlayerDied += ShowLoseScreen;
-        Enemy.OnEnemyDied += ShowWinScreen;
+        EventBus.OnPlayerDied += ShowLoseScreen;
+        EventBus.OnEnemyDied += ShowWinScreen;
     }
 
     private void OnDisable()
     {
-        Player.OnPlayerDied -= ShowLoseScreen;
-        Enemy.OnEnemyDied -= ShowWinScreen;
+        EventBus.OnPlayerDied -= ShowLoseScreen;
+        EventBus.OnEnemyDied -= ShowWinScreen;
     }
 
     private void Awake()
