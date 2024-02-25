@@ -464,11 +464,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 525f807075c3267488228dbbfa26734e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
-  _damage: 10
+  _rb: {fileID: 1792994609661942345}
   agent: {fileID: 1792994609661942346}
-  _heroe: {fileID: 0}
+  _damage: 1
   _speed: 7
+  _hp: 100
+  _mana: 100
 --- !u!1 &1378363537452169928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,8 +1263,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hpBar: {fileID: 1214206356582831920}
   _manaBar: {fileID: 6681205357942672086}
-  _hpText: {fileID: 2118298330}
   _manaText: {fileID: 1813361643}
+  _hpText: {fileID: 2118298330}
 --- !u!1 &7430904101401657591
 GameObject:
   m_ObjectHideFlags: 0

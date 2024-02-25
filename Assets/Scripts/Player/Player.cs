@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Player : Heroes
+public class Player : Hero
 {
     [SerializeField] private float _manaRecoverySpeed;
     [SerializeField] private float _mana;
@@ -14,7 +14,7 @@ public class Player : Heroes
         HP = _hp;
         Mana = _mana;
     }
-    
+
     protected override void Die()
     {
         EventBus.PlayerDie();

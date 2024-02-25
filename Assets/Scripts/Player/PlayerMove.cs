@@ -1,21 +1,23 @@
-using System;
 using System.Collections;
+using System.ComponentModel;
 using UnityEngine;
+using Zenject;
 
 public class PlayerMove : MonoBehaviour, IMoveble
 {
-    [SerializeField] private Heroes _enemy;
     [SerializeField] private Rigidbody _rigidbody;
     
     [SerializeField] private float _speed;
     [SerializeField] private float _deathYPos = 3f;
-
+    
+    private Enemy _enemy;
+    
     private float _yStartPosition;
     private bool _isCanMove;
     private float _castSkillTime;
 
     public float Speed { get; set; }
-
+    
     private void OnEnable()
     {
         EventBus.OnCastStarted += CastTime;
@@ -35,6 +37,8 @@ public class PlayerMove : MonoBehaviour, IMoveble
         _isCanMove = true;
         Speed = _speed;
         _yStartPosition = gameObject.transform.position.y;
+
+        _enemy = FindObjectOfType<Enemy>();
     }
 
     private void Update()
@@ -74,4 +78,6 @@ public class PlayerMove : MonoBehaviour, IMoveble
 
     private void DisableInputs() => 
         _isCanMove = false;
+    
+
 }   

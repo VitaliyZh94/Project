@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SimpleFarSkill : Skills
 {
+    private Image _skillImage;
     public SimpleFarSkill(float delay, string objectPath, Transform spawnPos)
     {
         _delay = delay;
@@ -25,6 +27,8 @@ public class SimpleFarSkill : Skills
         
         var attacjObj = _factory.GetObject();
         attacjObj.Attack();
+        
+        EventBus.DelayStart(_delay);
 
         yield return new WaitForSeconds(_delay);
         

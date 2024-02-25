@@ -2,17 +2,27 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
+using Zenject;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : Heroes, IMoveble
+public class Enemy : Hero, IMoveble
 {
     
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private Transform _heroe;
     
     [SerializeField] private float _damage;
     [SerializeField] private float _speed;
+    [SerializeField] private float _hp = 100f;
+    [SerializeField] private float _mana = 100f;
+    
+    private Player _player;
+
+    [Inject]
+    private void Constr(Player player) => 
+        _player = player;
+
     public float Speed { get; set; }
     
     private float _startSpeed;
@@ -22,13 +32,13 @@ public class Enemy : Heroes, IMoveble
         _startSpeed = _speed;
         Speed = _speed;
         agent.speed = Speed;
-        HP = 100f;
-        Mana = 100f;
+        HP = _hp;
+        Mana = _mana;
     }
     
     private void Update()
     {
-        var distToPlayer = (_heroe.position - transform.position).magnitude;
+        var distToPlayer = (_player.transform.position - transform.position).magnitude;
         
         if (distToPlayer < 5f)
         {
@@ -42,13 +52,12 @@ public class Enemy : Heroes, IMoveble
             Move();
         }
     }
-
     public void Move() => 
-        agent.SetDestination(_heroe.position);
+        agent.SetDestination(_player.transform.position);
     
     public void StopMoving() => 
         StartCoroutine(StopMovingRoutine());
-    
+
     private IEnumerator StopMovingRoutine()
     {
         agent.speed = 0;
@@ -64,5 +73,5 @@ public class Enemy : Heroes, IMoveble
     }
     
     private void Attack() => 
-        _heroe.GetComponent<Player>().TakeDamage(_damage);
+        _player.GetComponent<Player>().TakeDamage(_damage);
 }

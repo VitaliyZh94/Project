@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HardFarSkill : Skills
 {
-    private Heroes _player;
+    private Hero _player;
     private float _manaCost;
+    private Image _skillImage;
     
-    public HardFarSkill(float delay, float castTime, string objectPath, Transform spawnPos, Heroes player, float manaCost)
+    public HardFarSkill(float delay, float castTime, string objectPath, Transform spawnPos, Hero player, float manaCost)
     {
         _manaCost = manaCost;
         CastTime = castTime;
@@ -23,10 +25,10 @@ public class HardFarSkill : Skills
     {
         if (_isDelayed == false && IsEnoughtManaToAttack())
         {
+            CoroutineHandler.Instance.StartRoutine(ShotRoutine());
+            
             _player.GetComponent<PlayerMove>().StopMoving();
             _player.ChangeMana(_manaCost);
-            
-            CoroutineHandler.Instance.StartRoutine(ShotRoutine());
         }
     }
 

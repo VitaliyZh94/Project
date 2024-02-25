@@ -1,18 +1,28 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
+using Zenject;
 
 public class SkillController : MonoBehaviour
 {
-    [SerializeField] private Transform _spawnPos;
-    [SerializeField] private Heroes _player;
-    
     [SerializeField] private float _castTimeHardFarSkill;
     [SerializeField] private float _manaCostHardFarSkill;
-    
+
+
     private HardFarSkill _hardFarSkill;
     private SimpleFarSkill _simpleFarSkill;
+    private Player _player;
+    private Transform _spawnPos;
+
+    [Inject]
+    private void Constr(Player player) => 
+        _player = player;
+
     private void Start()
     {
+        var spawnPos = _player.GetComponent<SpawnPos>();
+        _spawnPos = spawnPos.GetSpawnPos();
+
         _simpleFarSkill = new SimpleFarSkill(1, Constants.SimpleBall, _spawnPos);
         _hardFarSkill = new HardFarSkill(3, _castTimeHardFarSkill, Constants.IceBallPrefabPath, _spawnPos, _player, _manaCostHardFarSkill);
     }

@@ -20,11 +20,15 @@ public class EnemyUI : MonoBehaviour
     private void OnEnable()
     {
         EventBus.OnTakeDamage += ChangeHp;
+        EventBus.OnEnemyDied += Hide;
+        EventBus.OnPlayerDied += Hide;
     }
 
     private void OnDisable()
     {
         EventBus.OnTakeDamage -= ChangeHp;
+        EventBus.OnEnemyDied -= Hide;
+        EventBus.OnPlayerDied -= Hide;
     }
 
     private void Start()
@@ -41,10 +45,16 @@ public class EnemyUI : MonoBehaviour
 
     }
 
-    private void ChangeHp(float takeDamage)
+    private void ChangeHp(float takeDamage, Hero hero)
     {
-        _hpBar.fillAmount = _enemy.HP/100;
-
-        _hpText.text = _enemy.HP.ToString();
+        if (hero == _enemy)
+        {
+            Debug.Log(hero);
+            _hpBar.fillAmount = _enemy.HP/100;
+            _hpText.text = _enemy.HP.ToString();
+        }
     }
+
+    private void Hide() => 
+        gameObject.SetActive(false);
 }

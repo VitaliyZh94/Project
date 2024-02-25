@@ -24,6 +24,8 @@ public class PlayerUI : MonoBehaviour
         EventBus.OnCastStarted += StartCastBar;
         EventBus.OnDelayStarted += StartDelayIcon;
         EventBus.OnTakeDamage += ChangeHp;
+        EventBus.OnEnemyDied += Hide;
+        EventBus.OnPlayerDied += Hide;
     }
 
     private void OnDisable()
@@ -31,6 +33,8 @@ public class PlayerUI : MonoBehaviour
         EventBus.OnCastStarted -= StartCastBar;
         EventBus.OnDelayStarted -= StartDelayIcon;
         EventBus.OnTakeDamage -= ChangeHp;
+        EventBus.OnEnemyDied -= Hide;
+        EventBus.OnPlayerDied -= Hide;
     }
 
     private void Awake() => 
@@ -50,10 +54,8 @@ public class PlayerUI : MonoBehaviour
         _manaText.text = _player.Mana.ToString();
     }
 
-    private void Update()
-    {
+    private void Update() => 
         ChangeManaBar();
-    }
 
     private void StartDelayIcon(float delay)
     {
@@ -69,10 +71,13 @@ public class PlayerUI : MonoBehaviour
                 _castBar.DOFillAmount(1, 0));
     }
 
-    private void ChangeHp(float takeDamage)
+    private void ChangeHp(float takeDamage, Hero hero)
     {
-        _hpBar.fillAmount -= takeDamage/_maxHp;
-        _hpText.text = _player.HP.ToString();
+        if (hero == _player)
+        {
+            _hpBar.fillAmount -= takeDamage/_maxHp;
+            _hpText.text = _player.HP.ToString();
+        }
     }
 
     private void ChangeManaBar()
@@ -80,4 +85,7 @@ public class PlayerUI : MonoBehaviour
         _manaBar.fillAmount = _player.Mana/_maxMana;
         _manaText.text = _player.Mana.ToString("0");
     }
+    
+    private void Hide() => 
+        gameObject.SetActive(false);
 }

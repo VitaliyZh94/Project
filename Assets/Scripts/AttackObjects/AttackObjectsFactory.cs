@@ -54,6 +54,8 @@ public class AttackObjectsFactory
     private IEnumerator ReturnToQueueRoutine(AttackObject obj)
     {
         yield return new WaitForSeconds(5f);
+
+        if (!obj) yield break;
         
         obj.gameObject.SetActive(false);
         _objectsQueue.Enqueue(obj);
