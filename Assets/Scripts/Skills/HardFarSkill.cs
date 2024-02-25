@@ -6,16 +6,19 @@ using UnityEngine.UI;
 public class HardFarSkill : Skills
 {
     private Hero _player;
-    private float _manaCost;
     private Image _skillImage;
+    private PlayerAnim _playerAnim;
     
-    public HardFarSkill(float delay, float castTime, string objectPath, Transform spawnPos, Hero player, float manaCost)
+    private float _manaCost;
+
+    public HardFarSkill(float delay, float castTime, string objectPath, Transform spawnPos, Hero player, float manaCost, PlayerAnim playerAnim)
     {
         _manaCost = manaCost;
         CastTime = castTime;
         _delay = delay;
         _isDelayed = false;
         _player = player;
+        _playerAnim = playerAnim;
 
         _factory = new AttackObjectsFactory(objectPath, spawnPos);
     }
@@ -36,6 +39,7 @@ public class HardFarSkill : Skills
     {
         _isDelayed = true;
         EventBus.StartCasting(CastTime);
+        _playerAnim.Cast();
         
         yield return new WaitForSeconds(CastTime);
         

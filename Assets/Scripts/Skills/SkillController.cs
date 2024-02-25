@@ -22,9 +22,10 @@ public class SkillController : MonoBehaviour
     {
         var spawnPos = _player.GetComponent<SpawnPos>();
         _spawnPos = spawnPos.GetSpawnPos();
+        var anim = _player.GetComponent<PlayerAnim>();
 
         _simpleFarSkill = new SimpleFarSkill(1, Constants.SimpleBall, _spawnPos);
-        _hardFarSkill = new HardFarSkill(3, _castTimeHardFarSkill, Constants.IceBallPrefabPath, _spawnPos, _player, _manaCostHardFarSkill);
+        _hardFarSkill = new HardFarSkill(3, _castTimeHardFarSkill, Constants.IceBallPrefabPath, _spawnPos, _player, _manaCostHardFarSkill, anim);
     }
 
     private void Update()

@@ -11,12 +11,13 @@ public class Enemy : Hero, IMoveble
     
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private NavMeshAgent agent;
-    
+    [SerializeField] private EnemyAnim _enemyAnim;
+
     [SerializeField] private float _damage;
     [SerializeField] private float _speed;
     [SerializeField] private float _hp = 100f;
     [SerializeField] private float _mana = 100f;
-    
+
     private Player _player;
 
     [Inject]
@@ -38,16 +39,20 @@ public class Enemy : Hero, IMoveble
     
     private void Update()
     {
-        var distToPlayer = (_player.transform.position - transform.position).magnitude;
+        transform.LookAt(_player.transform);
         
-        if (distToPlayer < 5f)
+        var distToPlayer = (_player.transform.position - transform.position).magnitude;
+
+        if (distToPlayer < 4f)
         {
+            _enemyAnim.Attack(true);
             Attack();
             agent.SetDestination(gameObject.transform.position);
             _rb.isKinematic = true;
         }
         else
         {
+            _enemyAnim.Attack(false);
             _rb.isKinematic = false;
             Move();
         }
@@ -55,14 +60,18 @@ public class Enemy : Hero, IMoveble
     public void Move() => 
         agent.SetDestination(_player.transform.position);
     
-    public void StopMoving() => 
+    public void StopMoving() =>
         StartCoroutine(StopMovingRoutine());
 
     private IEnumerator StopMovingRoutine()
     {
+        _enemyAnim.Freeze(true);
         agent.speed = 0;
+        
         yield return new WaitForSeconds(3);
+        
         agent.speed = _startSpeed;
+        _enemyAnim.Freeze(false);
     }
     
     protected override void Die()

@@ -14,4 +14,9 @@ public class Buttons : MonoBehaviour
 
     public void EnterMenuState() => 
         _gameStateMachine.ChangeState(new MainMenuState());
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }

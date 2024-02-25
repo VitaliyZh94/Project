@@ -14,7 +14,6 @@ public class Player : Hero
         HP = _hp;
         Mana = _mana;
     }
-
     protected override void Die()
     {
         EventBus.PlayerDie();

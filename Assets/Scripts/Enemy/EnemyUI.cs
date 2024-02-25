@@ -49,7 +49,6 @@ public class EnemyUI : MonoBehaviour
     {
         if (hero == _enemy)
         {
-            Debug.Log(hero);
             _hpBar.fillAmount = _enemy.HP/100;
             _hpText.text = _enemy.HP.ToString();
         }

@@ -1,7 +1,5 @@
 using System.Collections;
-using System.ComponentModel;
 using UnityEngine;
-using Zenject;
 
 public class PlayerMove : MonoBehaviour, IMoveble
 {
@@ -9,6 +7,7 @@ public class PlayerMove : MonoBehaviour, IMoveble
     
     [SerializeField] private float _speed;
     [SerializeField] private float _deathYPos = 3f;
+    [SerializeField] private PlayerAnim _playerAnim;
     
     private Enemy _enemy;
     
@@ -57,6 +56,10 @@ public class PlayerMove : MonoBehaviour, IMoveble
     {
         var horizontal = Input.GetAxis("Horizontal");
         var vertical = Input.GetAxis("Vertical");
+
+        var  movementSpeed = horizontal + vertical;
+        var absSpeed = Mathf.Abs(movementSpeed);
+        _playerAnim.Run(absSpeed);
 
         transform.Translate(new Vector3(horizontal, 0, vertical) * Speed * Time.deltaTime);
         transform.forward = (_enemy.transform.position - transform.position).normalized;
