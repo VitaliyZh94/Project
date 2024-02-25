@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-public abstract class Heroes : MonoBehaviour, IDamageable
+public abstract class Hero : MonoBehaviour, IDamageable
 {
     protected float ManaRecoverySpeed;
     protected float MaxMana;
@@ -15,13 +15,12 @@ public abstract class Heroes : MonoBehaviour, IDamageable
     private void Update()
     {
         Mana += ManaRecoverySpeed * Time.deltaTime;
-        
     }
 
     public void TakeDamage(float damage)
     {
-        HP -= damage; 
-        EventBus.TakeDamage(damage);
+        HP -= damage;
+        EventBus.TakeDamage(damage, this);
     }
 
     public void ChangeMana(float mana)
